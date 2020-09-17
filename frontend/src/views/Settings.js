@@ -5,12 +5,13 @@ import {
     Select, OutlinedInput, MenuItem, IconButton
 } from '@material-ui/core'
 import { DangerZone, TaskManager } from '../components/Forms'
-import { SettingsContext } from '../contexts/SettingsContext'
+import { AuthContext, SettingsContext } from '../contexts'
 import { CollapsibleCard } from '../components/CollapsibleCard'
 import { Refresh as RefreshIcon } from '@material-ui/icons'
 
 export const SettingsPage = props => {
     const [settings, setSettings] = useContext(SettingsContext)
+    const { user } = useContext(AuthContext)
     const [taskManagerKey, setTaskManagerKey] = useState(0)
 
     const handleChangeVisibleColumns = event => {
@@ -35,6 +36,15 @@ export const SettingsPage = props => {
             <Title>Settings</Title>
             
             <Grid container spacing={ 8 }>
+                <Grid item xs={ 12 }>
+                    <CollapsibleCard
+                        title="User"
+                        subheader=""
+                    >
+                        <pre>{ JSON.stringify(user, null, 2) }</pre>
+                    </CollapsibleCard>
+                </Grid>
+
                 <Grid item xs={ 12 }>
                     <CollapsibleCard
                         title="Chart Settings"
