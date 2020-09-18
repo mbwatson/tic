@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
             }
             
             if (userData.status === 'success') {
-                setUser(userData);
+                setUser({ ...userData, expiration: Date.now() + 60 });
             }
             
             return userData
