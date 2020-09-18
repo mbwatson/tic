@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useLocalStorage } from '../hooks'
-
-const AUTH_URL = process.env.REACT_APP_AUTH_URL
-const AUTH_API_KEY = process.env.REACT_APP_AUTH_API_KEY
 
 export const AuthContext = React.createContext({});
 
@@ -17,32 +13,31 @@ const defaultUser = {
 }
 
 export const AuthProvider = ({ children }) => {
-    // const [user, setUser] = useState(defaultUser)
-    const [user, setUser] = useLocalStorage('ctmd-user', defaultUser)
+    const [user, setUser] = useState(defaultUser)
+    const [localStorageUser, setLocalStorageUser] = useLocalStorage('ctmd-user')
 
     const logout = () => {
-        setUser({ })
-        window.location = 'http://localhost:3000'
+        localStorage.removeItem('ctmd-user')
+        window.location = 'https://redcap.vanderbilt.edu/plugins/TIN/user/login'
+    }
+
+    const authenticate = () => {
+        let userData = {}
+        // get query params--should have `status`, `username`, `organization`, `access_level`, `first_name`, `last_name`, `email`
+        const params = new URLSearchParams(window.location.search)
+        for (let params of params.entries()) {
+            userData[params[0]] = params[1]
+        }
+        setLocalStorageUser(userData)
+        setUser(userData)
     }
 
     useEffect(() => {
-        const authenticate = () => {
-            let userData = {}
-
-            // get params: status, username, organization, access_level, first_name, last_name, email
-            const params = new URLSearchParams(window.location.search)
-
-            for (let params of params.entries()) {
-                userData[params[0]] = params[1]
-            }
-            
-            if (userData.status === 'success') {
-                setUser({ ...userData, expiration: Date.now() + 60 });
-            }
-            
-            return userData
+        if (localStorageUser) {
+            setUser(localStorageUser)
+        } else {
+            authenticate()
         }
-        setUser(authenticate())
     }, [])
 
     return (
