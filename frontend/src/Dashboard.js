@@ -67,7 +67,7 @@ const Dashboard = props => {
                 <CssBaseline />
                 <ScrollToTop>
                     {
-                        user.username && (
+                        user && (
                             <Switch>
                                 <Route exact path="/manage" component={ ManagementPage }/>
                                 <Route exact path="/proposals/:id(\d+)" component={ ProposalReportPage }/>
@@ -91,7 +91,7 @@ const Dashboard = props => {
                             </Switch>
                         )
                     }
-                    { !user.username && <LoginPage /> }
+                    { !user && <LoginPage /> }
                 </ScrollToTop>
             </main>
             <Footer />

@@ -3,7 +3,7 @@ import { useLocalStorage } from '../hooks'
 
 export const AuthContext = React.createContext({});
 
-const defaultUser = {
+const emptyUser = {
     username: null,
     organization: null,
     access_level: null,
@@ -13,8 +13,9 @@ const defaultUser = {
 }
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(defaultUser)
+    const [user, setUser] = useState()
     const [localStorageUser, setLocalStorageUser] = useLocalStorage('ctmd-user')
+    const validReferrer = document.referrer === 'https://redcap.vanderbilt.edu/plugins/TIN/' || process.env.NODE_ENV === 'development'
 
     const logout = () => {
         localStorage.removeItem('ctmd-user')
@@ -22,18 +23,22 @@ export const AuthProvider = ({ children }) => {
     }
 
     const authenticate = () => {
-        let userData = {}
-        // get query params--should have `status`, `username`, `organization`, `access_level`, `first_name`, `last_name`, `email`
-        const params = new URLSearchParams(window.location.search)
-        for (let params of params.entries()) {
-            userData[params[0]] = params[1]
+        if (validReferrer) {
+            let userData = {}
+            // get query params--should have `status`, `username`, `organization`, `access_level`, `first_name`, `last_name`, `email`
+            const params = new URLSearchParams(window.location.search)
+            for (let params of params.entries()) {
+                userData[params[0]] = params[1]
+            }
+            // save user in local storage for later
+            setLocalStorageUser(userData)
+            // set active user in app for now
+            setUser(userData)
         }
-        setLocalStorageUser(userData)
-        setUser(userData)
     }
 
     useEffect(() => {
-        if (localStorageUser) {
+        if (localStorageUser && localStorageUser.hasOwnProperty('username')) {
             setUser(localStorageUser)
         } else {
             authenticate()
