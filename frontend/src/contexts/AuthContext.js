@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useLocalStorage } from '../hooks'
 
 const AUTH_URL = process.env.REACT_APP_AUTH_URL
 const AUTH_API_KEY = process.env.REACT_APP_AUTH_API_KEY
@@ -16,29 +17,38 @@ const defaultUser = {
 }
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(defaultUser)
+    // const [user, setUser] = useState(defaultUser)
+    const [user, setUser] = useLocalStorage('ctmd-user', defaultUser)
+
+    const logout = () => {
+        setUser({ })
+        window.location = 'http://localhost:3000'
+    }
 
     useEffect(() => {
-        console.log('auth context loaded')
-        const authenticate = async () => {
-            await axios.get(AUTH_URL, {
-                params: {
-                    apikey: AUTH_API_KEY,
-                    provider: 'venderbilt',
-                    return_url: 'http://localhost:3000',
-                    code: 'testAuth1234'
-                }
-            }).then(response => {
-                console.log(response)
-            }).catch(error => {
-                console.error(error)
-            })
+        const authenticate = () => {
+            let userData = {}
+
+            // get params: status, username, organization, access_level, first_name, last_name, email
+            const params = new URLSearchParams(window.location.search)
+
+            for (let params of params.entries()) {
+                userData[params[0]] = params[1]
+            }
+            
+            if (userData.status === 'success') {
+                setUser(userData);
+            }
+            
+            return userData
         }
-        authenticate()
+        setUser(authenticate())
     }, [])
 
-    return <AuthContext.Provider value={{ user }}>
-        { children }
-    </AuthContext.Provider>
+    return (
+        <AuthContext.Provider value={{ user: user, logout: logout }}>
+            { children }
+        </AuthContext.Provider>
+    )
 }
 
