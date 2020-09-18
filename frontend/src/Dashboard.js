@@ -13,7 +13,7 @@ import {
     SitesPage,
     UploadsPage,
     ProfilePage,
-    LoginPage, LoggedOutPage,
+    LoginPage, ExitPage,
     ProposalsListPage,
     ProposalReportPage,
     ProposalsByOrganization,
@@ -86,7 +86,7 @@ const Dashboard = props => {
                                 <Route path="/sites" component={ SitesPage }/>
                                 <Route path="/uploads" component={ UploadsPage }/>
                                 <Route path="/profile" component={ ProfilePage }/>
-                                <Route path="/logout" component={ LoggedOutPage }/>
+                                <Route path="/logout" component={ ExitPage }/>
                                 <Route path="/" component={ HomePage }/>
                             </Switch>
                         )

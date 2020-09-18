@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react'
 import { Title, Paragraph } from '../../components/Typography'
 import { AuthContext } from '../../contexts'
 
-export const LoggedOutPage = props => {
+export const ExitPage = props => {
     const { logout } = useContext(AuthContext)
 
     useEffect(() => {
