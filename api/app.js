@@ -9,6 +9,7 @@ app.use(cors())
 
 // Config
 const PORT = process.env.API_PORT || 3030
+const AUTH_API_KEY = process.env.AUTH_API_KEY
 
 // Tell me it's working!
 app.listen(PORT, () => {
@@ -53,3 +54,8 @@ app.use('/template', require('./routes/template-download'))
 
 // Graphics
 app.use('/graphics', require('./routes/graphics'))
+
+// Auth
+app.post('/auth', (req, res) => {
+  res.redirect(`https://auth-fuse.renci.org/v1/authorize?apikey=${ AUTH_API_KEY }&provider=venderbilt&return_url=https://ctmdreci.org/&code=${ req.body.code }`)
+})
