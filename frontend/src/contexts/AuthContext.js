@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
             for (let params of params.entries()) {
                 userData[params[0]] = params[1]
             }
+            console.log('userData')
+            console.log(userData)
             // save user in local storage for later
             setLocalStorageUser(userData)
             // set active user in app for now
@@ -38,11 +40,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if (localStorageUser && localStorageUser.hasOwnProperty('username')) {
-            setUser(localStorageUser)
-        } else {
-            authenticate()
-        }
+        authenticate()
     }, [])
 
     return (

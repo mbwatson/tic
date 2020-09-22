@@ -3,7 +3,6 @@ import { Title, Paragraph } from '../../components/Typography'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 export const LoginPage = props => {
-    console.log(props)
     return (
         <Fragment>
             <Title>Access Denied</Title>
