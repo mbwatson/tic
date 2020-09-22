@@ -59,6 +59,5 @@ app.use('/graphics', require('./routes/graphics'))
 // Auth
 app.post('/auth', (req, res) => {
   const code = req.body.code
-  console.log(`https://auth-fuse.renci.org/v1/authorize?apikey=${ AUTH_API_KEY }&provider=venderbilt&return_url=http://localhost:3000/&code=${ code }`)
   res.redirect(`https://auth-fuse.renci.org/v1/authorize?apikey=${ AUTH_API_KEY }&provider=venderbilt&return_url=http://localhost:3000/&code=${ code }`)
 })
