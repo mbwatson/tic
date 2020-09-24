@@ -15,8 +15,7 @@ const emptyUser = {
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState()
     const [localStorageUser, setLocalStorageUser] = useLocalStorage('ctmd-user')
-    // const validReferrer = document.referrer === 'https://redcap.vanderbilt.edu/plugins/TIN/sso/send_login' || process.env.NODE_ENV === 'development'
-    const validReferrer = true
+    const validReferrer = document.referrer === 'https://redcap.vanderbilt.edu/plugins/TIN/sso/send_login' || process.env.NODE_ENV === 'development'
 
     const logout = () => {
         localStorage.removeItem('ctmd-user')
@@ -41,7 +40,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        authenticate()
+        if (localStorageUser && localStorageUser.hasOwnProperty('username')) {
+            setUser(localStorageUser)
+        } else {
+            authenticate()
+        }
     }, [])
 
     return (
