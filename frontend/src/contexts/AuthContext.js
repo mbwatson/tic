@@ -15,7 +15,8 @@ const emptyUser = {
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState()
     const [localStorageUser, setLocalStorageUser] = useLocalStorage('ctmd-user')
-    const validReferrer = document.referrer === 'https://redcap.vanderbilt.edu/plugins/TIN/sso/send_login' || process.env.NODE_ENV === 'development'
+    // const validReferrer = document.referrer === 'https://redcap.vanderbilt.edu/plugins/TIN/sso/send_login' || process.env.NODE_ENV === 'development'
+    const validReferrer = true
 
     const logout = () => {
         localStorage.removeItem('ctmd-user')
