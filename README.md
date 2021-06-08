@@ -199,6 +199,17 @@ git checkout 1.19
 
 This automatically creates a local copy of that remote branch. Proceed by setting up the required environment variables below and continue with deployment instruction farther down.
 
+### Auth in local dev
+
+To override auth in local dev set `AUTH_ENV` to development in the api container
+
+### Using test dataset
+
+To use test dataset do the following:
+
+- Set `DOWNLOAD_REDCAP_DATA` env var to 0
+- Ensure that the variables defined below are defined.
+
 ### Set up Environment Variables
 
 Environment variables live in the file `./.env` in the project root. This file contains critical information to ensure communication between services running within Docker containers. The set of variables consists of database credentials, information about accessing the dashboard's API, REDCap database credentials, and data backup location. A brief desription of each environment variable follows.
@@ -235,6 +246,28 @@ Environment variables live in the file `./.env` in the project root. This file c
 - `REDIS_LOCK_EXPIRE`: expire time for distributed locking in seconds
 - `REDIS_LOCK_TIMEOUT`: timeout for distributed locking in seconds
 - `PAUSE`: pause at the end of test must be run using the run command
+- `MAPPING_LOCAL_PATH` the path to your dataset
+- `DATA_INPUT_FILE_PATH` the name of your dataset
+- `DOWNLOAD_REDCAP_DATA` whether to download the redcap dataset and override local dataset
+
+
+## Filtering
+
+The files within the `FILTER_PATH` directory are one-column CSVs as follows:
+
+```csv
+ProposalId
+171
+186
+```
+
+Proposal IDs listed will be shown in the dashboard. If the file is not present, nothing will be filtered, and the dashboard will show all proposals. If the file is present but contains no proposal IDs, _i.e._, contains only the column title, like
+
+```csv
+ProposalId
+```
+
+then nothing will be shown in the dashboard.
 
 When in doubt, use the `.env.sample` file as a guide (and it can be copied as-is to get things working out of the box for local development).
 

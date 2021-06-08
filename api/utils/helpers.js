@@ -25,6 +25,7 @@ exports.getHealUsers = (filePath) => {
   try {
     const data = fs.readFileSync(filePath, 'utf8')
     return data.split('\n')
+      .map(address => address.toLowerCase())
   } catch (err) {
     console.error(err)
   }
@@ -34,8 +35,8 @@ exports.checkIfIsHealUser = (req, healUsers) => {
   if (!req.session.auth_info) {
     return { statusCode: 403, data: { data: 'not authenticated' } }
   } else {
-    console.log('incomingEmail', incomingEmail)
     const incomingEmail = req.session.auth_info.email.toLowerCase()
+    console.log('incomingEmail', incomingEmail)
     const isHealUser = healUsers.includes(incomingEmail)
     const statusCode = isHealUser ? 200 : 403
     return { statusCode: statusCode, data: { isHealUser: isHealUser } }
